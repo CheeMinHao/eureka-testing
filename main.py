@@ -2,42 +2,59 @@ from selenium import webdriver
 import time
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 import os
 from dotenv import load_dotenv
 
+import pyotp
+import unittest
+
 load_dotenv()
 
-# Configure drive
-driver = webdriver.Chrome("C:/WebDriver/bin/chromedriver")
+class EurekaLoginTest(unittest.TestCase):
 
-# Open Web Browser
-driver.implicitly_wait(30)
-driver.set_page_load_timeout(50)
-driver.get("https://eureka-monash.com")
+    def setUp(self):
+        # Configure drive
+        self.driver = webdriver.Chrome("C:/WebDriver/bin/chromedriver")
+        # Open Web Browser
+        self.driver.implicitly_wait(30)
+        self.driver.set_page_load_timeout(50)
+        self.driver.get("https://eureka-monash.com")
+        self.wait = WebDriverWait(driver,10)
 
-# Conifgure main page (to handle redirection of windows)
-main_page = driver.current_window_handle
+    def test_login(self):
 
-# Logging in from Home Page
-driver.find_element_by_id("top-nav__name").click()
-driver.find_element_by_tag_name("button").click()
+        # Conifgure main page (to handle redirection of windows)
+        main_page = self.driver.current_window_handle
 
-for handle in driver.window_handles:
-    if handle != main_page:
-        login_page = handle
+        # Logging in from Home Page
+        self.driver.find_element_by_id("top-nav__name").click()
+        self.driver.find_element_by_tag_name("button").click()
 
-# Switch to Auth Page
-driver.switch_to.window(login_page)
+        for handle in self.driver.window_handles:
+            if handle != main_page:
+                login_page = handle
 
-# Input Credentials & Proceeding
-driver.find_element_by_css_selector("input[type=email]").send_keys(os.getenv("USER_NAME"))
-driver.find_element_by_class_name("VfPpkd-LgbsSe").click()
+        # Switch to Auth Page
+        self.driver.switch_to.window(login_page)
 
-driver.find_element_by_name("username").send_keys(os.getenv("USER_NAME"))
-driver.find_element_by_name("password").send_keys(os.getenv("PASSWORD"))
+        # Input Credentials & Proceeding
+        self.driver.find_element_by_css_selector("input[type=email]").send_keys(os.getenv("USER_NAME"))
+        self.driver.find_element_by_class_name("VfPpkd-LgbsSe").click()
 
+        # At Monash page, input user name and password
+        self.driver.find_element_by_name("username").send_keys(os.getenv("USER_NAME"))
+        self.driver.find_element_by_name("password").send_keys(os.getenv("PASSWORD"))
+        self.driver.find_element_by_id("okta-signin-submit").click()
 
+        totp = pyotp.TOTP(os.getenv("SECRET_KEY"))
 
-time.sleep(10)
-driver.quit()
+        authField = wait.until(EC.presence_of_element_located((By.XPATH, "//input[@name='answer']")))
+        token = totp.now()
+        authField.send_keys(token)
+        self.driver.find_element_by_xpath("//input[@type='submit']").click()
+
+        time.sleep(10)
+        self.driver.quit()
