@@ -16,9 +16,26 @@ This is the repository of Eureka's Software Testing. Currently in progress to ma
 
 <br>
 
+## Pre-requisites
+To install Selenium<br>
+<code>pip install selenium</code>
+
+To install virtual env for Python<br>
+<code>pip install python-dotenv</code>
+
+Three .env variables to be configured locally<br>
+<code>USER_NAME</code> = email to be used for Gmail/SSO<br>
+<code>PASSWORD</code> = password for SSO login<br>
+<code>SECRET_KEY</code> = secret key of Google Auth
+
+<b>For SECRET_KEY, it can be obtained during first time registration of Google Auth/Okta and request to show backup key (which is secret key)</b>
+
+<br>
+
 ## Technologies
-1. Python
+1. Python 3.9.5 (.venv)
 2. Selenium
+3. Chromedriver
 
 <br>
 
