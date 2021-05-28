@@ -23,5 +23,5 @@ This is the repository of Eureka's Software Testing. Currently in progress to ma
 <br>
 
 ## Contributor
-Chee Min Hao - Unit Testing
+Chee Min Hao - Functional Testing
 
