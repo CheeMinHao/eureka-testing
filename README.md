@@ -28,6 +28,8 @@ Three .env variables to be configured locally<br>
 <code>PASSWORD</code> = password for SSO login<br>
 <code>SECRET_KEY</code> = secret key of Google Auth
 
+<br>
+
 <b>For SECRET_KEY, it can be obtained during first time registration of Google Auth/Okta and request to show backup key (which is secret key)</b>
 
 <br>
